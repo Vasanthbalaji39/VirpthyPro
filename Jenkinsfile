@@ -1,24 +1,32 @@
-node {
+pipeline {
+     agent any
+stages {
     stage('Source Code Checkout') { // for display purposes..
-     echo 'source code is checkout out'
-     git credentialsId: 'Github-ID', url: 'https://github.com/DKPMOrg/VirpthyPro.git'
-   }
+         steps{ 
+               echo 'source code is checkout out'
+               git credentialsId: 'Github-ID', url: 'https://github.com/DKPMOrg/VirpthyPro.git'
+               }
+      }
    stage('Build and Test') {
-     echo 'Build is triggered with test execution'
-     sh 'mvn clean compile'
-    }
-    
-    /*stage('build & SonarQube Scan') {
-    withSonarQubeEnv('My SonarQube Server') {
-      //sh 'mvn clean package sonar:sonar'
-       } // SonarQube taskId is automatically attached to the pipeline context
-    }**/
+         steps{ 
+             //withMaven requires Pipeline maven integration plugin.
+            withMaven(maven : 'Maven-3.5.2'){
+            echo 'Build is triggered with test execution'
+            sh 'mvn clean compile'
+            }
+         }
+     } 
    
    stage('Deploy to DEV') {
-     echo 'Deploying to Dev environment'
+        steps{   
+               echo 'Deploying to Dev environment'
+             }
    }
    stage('Test Execution on Dev') {
-     echo 'Test execution on Dev'
-     sh 'mvn test'
+        steps{
+               echo 'Test execution on Dev'
+     //sh 'mvn test'
+             }
    }
+ }
 }

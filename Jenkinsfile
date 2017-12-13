@@ -9,8 +9,8 @@ stages {
       }
    stage('Build and Test') {
          steps{ 
-            echo 'Build is triggered with test execution'
             withMaven(maven : 'Maven-3.5.2'){
+            echo 'Build is triggered with test execution'
             sh 'mvn clean compile'
             }
          }
